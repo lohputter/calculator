@@ -51,14 +51,14 @@ h1:nth-child(2) {
     max-width: 45%;
 }
 #calculator-buttons button {
-    min-width: 20%;
+    min-width: 16%;
     font-size: 1em;
     min-height: 5em;
 }
 #calculator-buttons .large {
-    min-width: 40%;
+    min-width: 32%;
 }
-#equal {
+.imp2 {
     background-color: #34a1eb;
 }
 .imp {

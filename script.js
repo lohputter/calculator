@@ -1,5 +1,6 @@
 var equation = "0";
 var length = 1;
+var answer = "";
 function redo() {
     length = 1;
     equation = "0";
@@ -7,7 +8,6 @@ function redo() {
 }
 function del() {
     length--;
-    console.log(equation);
     equation = String(equation).slice(0, -1);
     document.getElementById("equation").innerHTML = equation;
     if (length < 1 || equation == "-") {
@@ -43,7 +43,7 @@ function factorial(x) {
     }
 }
 function abs() {
-    equation = `|${equation}|`;
+    equation = `︱${equation}│`;
     length++;
     document.getElementById("equation").innerHTML = equation;
 }
@@ -51,7 +51,10 @@ function equals() {
     equation = equation
         .replaceAll('×', '*')
         .replaceAll('–', '-')
-        .replaceAll('÷', '/');
+        .replaceAll('÷', '/')
+        .replaceAll('︱', 'Math.abs(')
+        .replaceAll('│', ')')
+        .replaceAll('Ans', answer);
     equation = equation.replaceAll(/(\d*)π/g, (match, p1) => {
         if (p1) {
             return `${p1} * Math.PI`;
@@ -78,17 +81,13 @@ function equals() {
             equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1)) / 100);
         }
     }
-    if (equation.includes("|")) {
-        const abs = equation.match(/\|(.+?)\|/g);
-        for (let i = 0; i < abs.length; i++) {
-            equation = equation.replaceAll(abs[i], `Math.abs(${abs[i].slice(1, -1)})`)
-        }
-    }
     if (equation.includes("*") && !equation.includes("Math.PI") && !equation.includes("Math.E")) {
         var numbers = equation.split("*");
         var round = 0;
         for (let i=0; i<numbers.length; i++) {
-            round += (numbers[i].split(".")[1] != 1) ? numbers[i].split(".")[1].length: 0;
+            if (numbers[i].includes(".")) {
+                round += numbers[i].split(".")[1].length;
+            }
         }
         equation = Number(eval(equation).toFixed(round));
     } else {
@@ -103,4 +102,5 @@ function equals() {
             length++;
         }
     }
+    answer = equation;
 }
