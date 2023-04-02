@@ -22,11 +22,30 @@ function num(digit) {
         window.alert("Sorry! Not enough space!");
     }
 }
+function factorial(x) {
+    if (x == 1) {
+        return 1;
+    } else {
+        return x * factorial(x - 1);
+    }
+}
 function equals() {
     equation = equation
         .replaceAll('×', '*')
         .replaceAll('–', '-')
         .replaceAll('÷', '/');
+    if (equation.includes("!")) {
+        const factor = equation.match(/([0-9]+)!/gi);
+        for (let i = 0; i < factor.length; i++) {
+            equation = equation.replaceAll(factor[i], factorial(Number(factor[i].slice(0, -1))));
+        }
+    }
+    if (equation.includes("%")) {
+        const percent = equation.match(/([0-9]+(|.[0-9]+))%/gi);
+        for (let i = 0; i < percent.length; i++) {
+            equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1))/100)
+        }
+    }   
     if (equation.includes("*")) {
         var numbers = equation.split("*");
         var round = 0;
@@ -39,8 +58,8 @@ function equals() {
     }
     document.getElementById("equation").innerHTML = equation;
     length = 0;
-    for (let i in equation.split("")) {
-        if (i == ".") {
+    for (let i in String(equation)) {
+        if (i === ".") {
             length += 0.5;
         } else {
             length++;
