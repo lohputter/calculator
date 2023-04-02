@@ -5,12 +5,25 @@ function redo() {
     equation = "0";
     document.getElementById("equation").innerHTML = "0";
 }
+function del() {
+    length--;
+    console.log(equation);
+    equation = String(equation).slice(0, -1);
+    document.getElementById("equation").innerHTML = equation;
+    if (length < 1 || equation == "-") {
+        document.getElementById("equation").innerHTML = "0";
+        equation = "0";
+        length = 1;
+    }
+}
 function num(digit) {
     if (length < 25) {
         if (equation != "0" || digit == "." || digit == "!" || digit == "%" || digit == "+" || digit == "–" || digit == "×" || digit == "÷") {
             equation += digit;
             if (digit == ".") {
                 length += 0.5;
+            } else if (digit == "÷" || digit == "%" || digit == "×" || digit == "÷") {
+                length += 1.25;
             } else {
                 length++;
             }
@@ -29,11 +42,30 @@ function factorial(x) {
         return x * factorial(x - 1);
     }
 }
+function abs() {
+    equation = `|${equation}|`;
+    length++;
+    document.getElementById("equation").innerHTML = equation;
+}
 function equals() {
     equation = equation
         .replaceAll('×', '*')
         .replaceAll('–', '-')
         .replaceAll('÷', '/');
+    equation = equation.replaceAll(/(\d*)π/g, (match, p1) => {
+        if (p1) {
+            return `${p1} * Math.PI`;
+        } else {
+            return "Math.PI";
+        }
+    });
+    equation = equation.replaceAll(/(\d*)e/g, (match, p1) => {
+        if (p1) {
+            return `${p1} * Math.E`;
+        } else {
+            return "Math.E";
+        }
+    });
     if (equation.includes("!")) {
         const factor = equation.match(/([0-9]+)!/gi);
         for (let i = 0; i < factor.length; i++) {
@@ -41,16 +73,22 @@ function equals() {
         }
     }
     if (equation.includes("%")) {
-        const percent = equation.match(/([0-9]+(|.[0-9]+))%/gi);
+        const percent = equation.match(/([0-9]+|\d+\.\d+)(\*?)%/g);
         for (let i = 0; i < percent.length; i++) {
-            equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1))/100)
+            equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1)) / 100);
         }
-    }   
-    if (equation.includes("*")) {
+    }
+    if (equation.includes("|")) {
+        const abs = equation.match(/\|(.+?)\|/g);
+        for (let i = 0; i < abs.length; i++) {
+            equation = equation.replaceAll(abs[i], `Math.abs(${abs[i].slice(1, -1)})`)
+        }
+    }
+    if (equation.includes("*") && !equation.includes("Math.PI") && !equation.includes("Math.E")) {
         var numbers = equation.split("*");
         var round = 0;
         for (let i=0; i<numbers.length; i++) {
-            round += (numbers[i].split(".").length != 1) ? numbers[i].split(".")[1].length: 0;
+            round += (numbers[i].split(".")[1] != 1) ? numbers[i].split(".")[1].length: 0;
         }
         equation = Number(eval(equation).toFixed(round));
     } else {
