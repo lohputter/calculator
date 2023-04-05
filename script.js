@@ -1,10 +1,26 @@
 var equation = "0";
 var length = 1;
 var answer = "";
+var pows = 0;
+function swap() {
+    if (equation[0] != "0" && equation[0] != "–") {
+        equation = "–" + equation;
+        length++;
+    } else {
+        equation = equation.slice(1, equation.length+1);
+        length--;
+    }
+    document.getElementById("equation").innerHTML = equation;
+}
 function redo() {
     length = 1;
     equation = "0";
     document.getElementById("equation").innerHTML = "0";
+}
+function pow() {
+    document.getElementById("equation").innerHTML += `<sup><input onkeyup="update(${pows})" class="pow" type="text"></sup>`;
+    equation += "^";
+    pows++;
 }
 function del() {
     length--;
@@ -54,7 +70,9 @@ function equals() {
         .replaceAll('÷', '/')
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
-        .replaceAll('Ans', answer);
+        .replaceAll('Ans', answer)
+        .replaceAll('--', "+")
+        .replaceAll('^', "**");
     equation = equation.replaceAll(/(\d*)π/g, (match, p1) => {
         if (p1) {
             return `${p1} * Math.PI`;
@@ -103,4 +121,11 @@ function equals() {
         }
     }
     answer = equation;
+    console.log(equation);
+    pows = 0;
+}
+function update(x) {
+    length += equation.length - equation.indexOf("^");
+    equation += document.getElementsByClassName("pow")[x].value;
+    console.log(equation);
 }

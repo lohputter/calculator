@@ -64,3 +64,11 @@ h1:nth-child(2) {
 .imp {
     background-color: #fca656;
 }
+.pow {
+    border: none;
+    font-family: 'STIX Two Text', serif;
+    background-color: transparent;
+    height: 1em;
+    width: 1em;
+    font-size: 1em;
+}
