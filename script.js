@@ -19,7 +19,7 @@ function redo() {
 }
 function pow() {
     document.getElementById("equation").innerHTML += `<sup><input onkeyup="update(${pows})" class="pow" type="text"></sup>`;
-    equation += "^";
+    equation += "^(";
     pows++;
 }
 function del() {
@@ -46,7 +46,12 @@ function num(digit) {
         } else {
             equation = digit;
         }
+        if (equation.includes("^(")) {
+            console.log(document.getElementsByClassName("pow")[pows-1].value);
+            equation = equation.replaceAll("^(" + document.getElementsByClassName("pow")[pows-1].value, `<sup><input onkeyup="update(${pows-1})" class="pow" type="text"></sup>`);
+        }
         document.getElementById("equation").innerHTML = equation;
+        equation.replaceAll(`<sup><input onkeyup="update(${pows-1})" class="pow" type="text"></sup>`, "^(");
     } else {
         window.alert("Sorry! Not enough space!");
     }
@@ -121,11 +126,10 @@ function equals() {
         }
     }
     answer = equation;
-    console.log(equation);
     pows = 0;
 }
 function update(x) {
-    length += equation.length - equation.indexOf("^");
+    length += equation.length - equation.indexOf("(");
     equation += document.getElementsByClassName("pow")[x].value;
-    console.log(equation);
+    console.log(document.getElementsByClassName("pow")[x].value);
 }
