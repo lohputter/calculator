@@ -1,8 +1,6 @@
 var equation = "0";
 var length = 1;
 var answer = "";
-var pows = 0;
-//test.
 function swap() {
     if (equation[0] != "0" && equation[0] != "–") {
         equation = "–" + equation;
@@ -17,12 +15,19 @@ function redo() {
     length = 1;
     equation = "0";
     document.getElementById("equation").innerHTML = "0";
-    pows = 0;
 }
 function pow() {
-    document.getElementById("equation").innerHTML += `<sup><input onkeyup="update(${pows})" class="pow" type="text"></sup>`;
+    document.getElementById("equation").innerHTML += `<sup><input onkeyup="update('pow')" class="pow" type="text"></sup>`;
     equation += "^(";
-    pows++;
+}
+function sqrt() {
+    if (equation != "0") {
+        document.getElementById("equation").innerHTML += `√<input onkeyup="update('sqrt')" class="sqrt" type="text">`;
+        equation += "√(";
+    } else {
+        document.getElementById("equation").innerHTML = `√<input onkeyup="update('sqrt')" class="sqrt" type="text">`;
+        equation = "√(";
+    }
 }
 function del() {
     length--;
@@ -38,25 +43,32 @@ function num(digit) {
     if (length < 25) {
         if (equation != "0" || digit == "." || digit == "!" || digit == "%" || digit == "+" || digit == "–" || digit == "×" || digit == "÷") {
             equation += digit;
-            if (digit == ".") {
-                length += 0.5;
-            } else if (digit == "÷" || digit == "%" || digit == "×" || digit == "÷") {
-                length += 1.25;
-            } else if (digit != "^" && digit != "(" && digit != ")") {
-                length++;
-            }
         } else {
             equation = digit;
         }
         document.getElementById("equation").innerHTML = equation;
         if (equation.includes("^")) {
-            let indices = document.getElementById("equation").innerHTML.match(/\^\(\d+\)/g);
+            let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+)\)/g);
             for (let i=0; i<indices.length; i++) {
                 document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(indices[i], `<sup>${indices[i].slice(2, -1)}</sup>`);
             }
         }
+        if (equation.includes("√")) {
+            let sqrts = document.getElementById("equation").innerHTML.match(/√\((-+|)(\d+|\d+.\d+)\)/g);
+            for (let i=0; i<sqrts.length; i++) {
+                document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(sqrts[i], sqrts[i].slice(3, -1));
+            }
+        }
     } else {
         window.alert("Sorry! Not enough space!");
+    }
+    length = 0;
+    for (let i=0; i<equation.length; i++) {
+        if (equation[i] === ".") {
+            length += 0.5;
+        } else if (equation[i] !== "^" && equation[i] !== "(" && equation[i] !== ")") {
+            length++;
+        }
     }
 }
 function factorial(x) {
@@ -79,8 +91,10 @@ function equals() {
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
         .replaceAll('Ans', answer)
-        .replaceAll('--', "+")
-        .replaceAll('^', "**");
+        .replaceAll('√', 'Math.sqrt')
+        .replaceAll('--', "+");
+    equation = equation.replace(/(?<=^|[\+\-\**\*\/\^])-([0-9]+)/g, "($1)");
+    equation = equation.replaceAll("^", "**");
     equation = equation.replaceAll(/(\d*)π/g, (match, p1) => {
         if (p1) {
             return `${p1} * Math.PI`;
@@ -107,18 +121,7 @@ function equals() {
             equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1)) / 100);
         }
     }
-    if (equation.includes("*") && !equation.includes("Math.PI") && !equation.includes("Math.E")) {
-        var numbers = equation.split("*");
-        var round = 0;
-        for (let i=0; i<numbers.length; i++) {
-            if (numbers[i].includes(".")) {
-                round += numbers[i].split(".")[1].length;
-            }
-        }
-        equation = Number(eval(equation).toFixed(round));
-    } else {
-        equation = eval(equation);
-    }
+    equation = eval(equation);
     document.getElementById("equation").innerHTML = equation;
     length = 0;
     for (let i in String(equation)) {
@@ -129,9 +132,8 @@ function equals() {
         }
     }
     answer = equation;
-    pows = 0;
 }
-function update(x) {
-    length += equation.length - equation.indexOf("(");
-    equation = equation.slice(0, equation.indexOf("(")+1) + document.getElementsByClassName("pow")[x].value + ")";
+function update(type) {
+    length += equation.length - equation.lastIndexOf("(");
+    equation = equation.slice(0, equation.lastIndexOf("(")+1) + document.getElementsByClassName(type)[0].value + ")";
 }

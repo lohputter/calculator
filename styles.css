@@ -9,9 +9,9 @@ body {
     padding: 0;
 }
 header {
-    font-size: 0.5em;
+    font-size: 0.75vw;
     width: 100%;
-    padding: 0.5em;
+    padding: 0.5vw;
     background-color: #b6d1fc;
     color: #444b57;
     position: fixed;
@@ -19,41 +19,40 @@ header {
 }
 h1:nth-child(1) {
     float: left;
-    padding-left: 0.5em;
+    padding-left: 0.5vw;
 }
 h1:nth-child(2) {
     float: right;
-    padding-right: 1.5em;
+    padding-right: 1.5vw;
 }
 #formula-screen, #calculator-buttons {
-    width: 50%;
     margin: auto;
 }
 #formula-screen {
-    margin-top: 7.5rem;
-    min-height: 0.5em;
-    width: 45%;
-    font-size: 3em;
+    margin-top: 7.5vw;
+    min-height: 0.5vw;
+    width: 60%;
+    font-size: 4vw;
     background-color: #fafbfc; 
     border: 1px solid darkblue;
 }
 #formula-screen p {
     text-align: right;
-    padding: 0.5em;
+    padding: 0 0.75vw;
     font-family: 'STIX Two Text', serif;
     white-space: nowrap;
 }
 #calculator-buttons {
-    margin: 2em auto;
+    margin: 2vw auto;
     display: flexbox;
     flex-direction: row;
     align-items: center;
-    max-width: 45%;
+    max-width: 60%;
 }
 #calculator-buttons button {
     min-width: 16%;
-    font-size: 1em;
-    min-height: 5em;
+    font-size: 2vw;
+    min-height: 6.5vw;
 }
 #calculator-buttons .large {
     min-width: 32%;
@@ -64,11 +63,11 @@ h1:nth-child(2) {
 .imp {
     background-color: #fca656;
 }
-.pow {
+input {
     border: none;
     font-family: 'STIX Two Text', serif;
     background-color: transparent;
-    height: 1em;
-    width: 1em;
-    font-size: 1em;
+    height: 10%;
+    width: 5%;
+    font-size: 3vw;
 }
