@@ -2,6 +2,7 @@ var equation = "0";
 var length = 1;
 var answer = "";
 var pows = 0;
+//test.
 function swap() {
     if (equation[0] != "0" && equation[0] != "–") {
         equation = "–" + equation;
@@ -16,6 +17,7 @@ function redo() {
     length = 1;
     equation = "0";
     document.getElementById("equation").innerHTML = "0";
+    pows = 0;
 }
 function pow() {
     document.getElementById("equation").innerHTML += `<sup><input onkeyup="update(${pows})" class="pow" type="text"></sup>`;
@@ -40,18 +42,19 @@ function num(digit) {
                 length += 0.5;
             } else if (digit == "÷" || digit == "%" || digit == "×" || digit == "÷") {
                 length += 1.25;
-            } else {
+            } else if (digit != "^" && digit != "(" && digit != ")") {
                 length++;
             }
         } else {
             equation = digit;
         }
-        if (equation.includes("^(")) {
-            console.log(document.getElementsByClassName("pow")[pows-1].value);
-            equation = equation.replaceAll("^(" + document.getElementsByClassName("pow")[pows-1].value, `<sup><input onkeyup="update(${pows-1})" class="pow" type="text"></sup>`);
-        }
         document.getElementById("equation").innerHTML = equation;
-        equation.replaceAll(`<sup><input onkeyup="update(${pows-1})" class="pow" type="text"></sup>`, "^(");
+        if (equation.includes("^")) {
+            let indices = document.getElementById("equation").innerHTML.match(/\^\(\d+\)/g);
+            for (let i=0; i<indices.length; i++) {
+                document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(indices[i], `<sup>${indices[i].slice(2, -1)}</sup>`);
+            }
+        }
     } else {
         window.alert("Sorry! Not enough space!");
     }
@@ -130,6 +133,5 @@ function equals() {
 }
 function update(x) {
     length += equation.length - equation.indexOf("(");
-    equation += document.getElementsByClassName("pow")[x].value;
-    console.log(document.getElementsByClassName("pow")[x].value);
+    equation = equation.slice(0, equation.indexOf("(")+1) + document.getElementsByClassName("pow")[x].value + ")";
 }
