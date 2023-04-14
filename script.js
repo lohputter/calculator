@@ -1,3 +1,5 @@
+
+
 var equation = "0";
 var length = 1;
 var answer = "";
@@ -85,7 +87,7 @@ function equals() {
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
         .replaceAll('Ans', answer)
-        .replaceAll(/\√(\d+|\d+.\d+)(\^\((\d+|\d+.\d+)\)|)/g, "Math.sqrt($1)")
+        .replaceAll(/\√(-?\d+|\d+.\d+)/g, "Math.sqrt($1)")
         .replaceAll('--', "+");
     equation = equation.replace(/(?<=^|[\+\-\**\*\/])-([0-9]+)/g, "($1)");
     equation = equation.replaceAll("^", "**");
@@ -115,7 +117,22 @@ function equals() {
             equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1)) / 100);
         }
     }
-    equation = eval(equation);
+    if ((equation.includes("*") || equation.includes("**")) && !equation.includes("Math.PI") && !equation.includes("Math.E")) {
+        if (equation.includes("**")) {
+            var numbers = equation.split("**");
+        } else {
+            var numbers = equation.split("*");
+        }
+        var round = 0;
+        for (let i=0; i<numbers.length; i++) {
+            if (numbers[i].includes(".")) {
+                round += numbers[i].split(".")[1].length;
+            }
+        }
+        equation = Number(eval(equation).toFixed(round));
+    } else {
+        equation = eval(equation);
+    }
     document.getElementById("equation").innerHTML = equation;
     length = 0;
     for (let i in String(equation)) {
