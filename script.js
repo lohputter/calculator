@@ -22,11 +22,11 @@ function pow() {
 }
 function sqrt() {
     if (equation != "0") {
-        document.getElementById("equation").innerHTML += `√<input onkeyup="update('sqrt')" class="sqrt" type="text">`;
-        equation += "√(";
+        document.getElementById("equation").innerHTML += `√`;
+        equation += "√";
     } else {
-        document.getElementById("equation").innerHTML = `√<input onkeyup="update('sqrt')" class="sqrt" type="text">`;
-        equation = "√(";
+        document.getElementById("equation").innerHTML = `√`;
+        equation = "√";
     }
 }
 function del() {
@@ -51,12 +51,6 @@ function num(digit) {
             let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+)\)/g);
             for (let i=0; i<indices.length; i++) {
                 document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(indices[i], `<sup>${indices[i].slice(2, -1)}</sup>`);
-            }
-        }
-        if (equation.includes("√")) {
-            let sqrts = document.getElementById("equation").innerHTML.match(/√\((-+|)(\d+|\d+.\d+)\)/g);
-            for (let i=0; i<sqrts.length; i++) {
-                document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(sqrts[i], sqrts[i].slice(3, -1));
             }
         }
     } else {
@@ -91,9 +85,9 @@ function equals() {
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
         .replaceAll('Ans', answer)
-        .replaceAll('√', 'Math.sqrt')
+        .replaceAll(/\√(\d+|\d+.\d+)(\^\((\d+|\d+.\d+)\)|)/g, "Math.sqrt($1)")
         .replaceAll('--', "+");
-    equation = equation.replace(/(?<=^|[\+\-\**\*\/\^])-([0-9]+)/g, "($1)");
+    equation = equation.replace(/(?<=^|[\+\-\**\*\/])-([0-9]+)/g, "($1)");
     equation = equation.replaceAll("^", "**");
     equation = equation.replaceAll(/(\d*)π/g, (match, p1) => {
         if (p1) {
