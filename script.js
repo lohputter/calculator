@@ -87,7 +87,7 @@ function equals() {
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
         .replaceAll('Ans', answer)
-        .replaceAll(/\√(-?\d+|\d+.\d+)/g, "Math.sqrt($1)")
+        .replaceAll(/\√(\-?\d+|\d+.\d+)/g, "Math.sqrt($1)")
         .replaceAll('--', "+");
     equation = equation.replace(/(?<=^|[\+\-\**\*\/])-([0-9]+)/g, "($1)");
     equation = equation.replaceAll("^", "**");
@@ -117,12 +117,8 @@ function equals() {
             equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1)) / 100);
         }
     }
-    if ((equation.includes("*") || equation.includes("**")) && !equation.includes("Math.PI") && !equation.includes("Math.E")) {
-        if (equation.includes("**")) {
-            var numbers = equation.split("**");
-        } else {
-            var numbers = equation.split("*");
-        }
+    if ((equation.includes("*") && !equation.includes("**")) && !equation.includes("Math.PI") && !equation.includes("Math.E")) {
+        var numbers = equation.split("*");
         var round = 0;
         for (let i=0; i<numbers.length; i++) {
             if (numbers[i].includes(".")) {
