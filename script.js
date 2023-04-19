@@ -48,7 +48,7 @@ function num(digit) {
         }
         document.getElementById("equation").innerHTML = equation;
         if (equation.includes("^")) {
-            let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+)\)/g);
+            let indices = document.getElementById("equation").innerHTML.match(/\^\((\d+|\d+.\d+)\)/g);
             for (let i=0; i<indices.length; i++) {
                 document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(indices[i], `<sup>${indices[i].slice(2, -1)}</sup>`);
             }
@@ -80,15 +80,26 @@ function abs() {
 function equals() {
     equation = equation
         .replaceAll('×', '*')
-        .replaceAll('–', '-')
         .replaceAll('÷', '/')
+        .replaceAll('–', '-')
+        .replaceAll('--', "+")
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
-        .replaceAll('Ans', answer)
-        .replaceAll(/\√(\d+|\d+.\d+)(\^\((\d+|\d+.\d+)\)|)/g, "Math.sqrt($1)")
-        .replaceAll('--', "+");
-    equation = equation.replace(/(?<=^|[\+\-\**\*\/])-([0-9]+)/g, "($1)");
-    equation = equation.replaceAll("^", "**");
+        .replaceAll('Ans', answer);
+    let minus = equation.match(/(\d+.\d+|\d+|e|π)?-(\d+.\d+|\d+|e|π)/g);
+    console.log(minus);
+    if (minus != null) {
+        for (let i=0; i<minus.length; i++) {
+            if (minus[i].startsWith('-')) {
+                console.log("so true", minus[i]);
+                equation = equation.replaceAll(minus[i], `(${minus[i]})`);
+                console.log(equation);
+            }
+        }
+    }
+    equation = equation
+        .replaceAll('^', '**')
+        .replaceAll(/\√(\d+.\d+|\d+|e|π)/g, "Math.sqrt($1)");
     equation = equation.replaceAll(/(\d*)π/g, (match, p1) => {
         if (p1) {
             return `${p1} * Math.PI`;
@@ -128,6 +139,7 @@ function equals() {
     answer = equation;
 }
 function update(type) {
+    document.getElementsByClassName(type)[0].style.width = `${document.getElementsByClassName(type)[0].value.length * 2.5}%`;
     length += equation.length - equation.lastIndexOf("(");
     equation = equation.slice(0, equation.lastIndexOf("(")+1) + document.getElementsByClassName(type)[0].value + ")";
 }
