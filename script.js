@@ -20,6 +20,15 @@ function pow() {
     document.getElementById("equation").innerHTML += `<sup><input onkeyup="update('pow')" class="pow" type="text"></sup>`;
     equation += "^(";
 }
+function frac() {
+    if (equation != "0") {
+        document.getElementById("equation").innerHTML += `<sup><input onkeyup="update('numer')" class="numer" type="text"></sup>&frasl;<sub><input onkeyup="update('denom')" class="denom" type="text"></sub></frac>`;
+        equation += "(";
+    } else {
+        document.getElementById("equation").innerHTML = `<sup><input onkeyup="update('numer')" class="numer" type="text"></sup>&frasl;<sub><input onkeyup="update('denom')" class="denom" type="text"></sub></frac>`;
+        equation = "(";
+    }
+}
 function sqrt() {
     if (equation != "0") {
         document.getElementById("equation").innerHTML += `√`;
@@ -48,10 +57,13 @@ function num(digit) {
         }
         document.getElementById("equation").innerHTML = equation;
         if (equation.includes("^")) {
-            let indices = document.getElementById("equation").innerHTML.match(/\^\((\d+|\d+.\d+)\)/g);
+            let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+)\)/g);
             for (let i=0; i<indices.length; i++) {
                 document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(indices[i], `<sup>${indices[i].slice(2, -1)}</sup>`);
             }
+        }
+        if (equation.includes("[")) {
+            document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(/\(\[(\d+.\d+|\d+)\]\/\[(\d+.\d+|\d+)\]\)/g, `<sup>$1</sup>&frasl;<sub>$2</sub>`);
         }
     } else {
         window.alert("Sorry! Not enough space!");
@@ -85,6 +97,8 @@ function equals() {
         .replaceAll('--', "+")
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
+        .replaceAll('[', '(')
+        .replaceAll(']', ')')
         .replaceAll('Ans', answer);
     let minus = equation.match(/(\d+.\d+|\d+|e|π)?-(\d+.\d+|\d+|e|π)/g);
     console.log(minus);
@@ -97,17 +111,15 @@ function equals() {
             }
         }
     }
-    equation = equation
-        .replaceAll('^', '**')
-        .replaceAll(/\√(\d+.\d+|\d+|e|π)/g, "Math.sqrt($1)");
-    equation = equation.replaceAll(/(\d*)π/g, (match, p1) => {
+    equation = equation.replaceAll(/\√(\d+.\d+|\d+|e|π)/g, "Math.sqrt($1)");
+    equation = equation.replaceAll(/(\d*|e)π/g, (match, p1) => {
         if (p1) {
             return `${p1} * Math.PI`;
         } else {
             return "Math.PI";
         }
     });
-    equation = equation.replaceAll(/(\d*)e/g, (match, p1) => {
+    equation = equation.replaceAll(/(\d*|Math.PI)e/g, (match, p1) => {
         if (p1) {
             return `${p1} * Math.E`;
         } else {
@@ -126,7 +138,23 @@ function equals() {
             equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1)) / 100);
         }
     }
-    equation = eval(equation);
+    var round = 0;
+    if (equation.includes("^")) {
+        console.log(equation);
+        var numbers = equation.match(/\^\((\d+.\d+|\d+)\)/g);
+        console.log(numbers);
+        for (let i=0; i<numbers.length; i++) {
+            if (!numbers[i].includes(".")) {
+                round += numbers[i].slice(2, numbers[i].length).length;
+            }
+        }
+    }
+    equation = equation.replaceAll("^", "**");
+    if (round == 0) {
+        equation = eval(equation);
+    } else {
+        equation = Number(eval(equation).toFixed(round));
+    }
     document.getElementById("equation").innerHTML = equation;
     length = 0;
     for (let i in String(equation)) {
@@ -141,5 +169,15 @@ function equals() {
 function update(type) {
     document.getElementsByClassName(type)[0].style.width = `${document.getElementsByClassName(type)[0].value.length * 2.5}%`;
     length += equation.length - equation.lastIndexOf("(");
-    equation = equation.slice(0, equation.lastIndexOf("(")+1) + document.getElementsByClassName(type)[0].value + ")";
+    if (equation.includes("[")) {
+        let divs = equation.match(/\(\[(\d+.\d+|\d+)\]\/\[(\d+.\d+|\d+)\]\)/g);
+        if (divs != null) {
+            length -= divs.length * 5;
+        }
+    }
+    if (type=="pow") {
+        equation = equation.slice(0, equation.lastIndexOf("(")+1) + document.getElementsByClassName(type)[0].value + ")";
+    } else {
+        equation = `${equation.slice(0, equation.lastIndexOf("(")+1)}[${document.getElementsByClassName('numer')[0].value}]/[${document.getElementsByClassName('denom')[0].value}])`;
+    }
 }
