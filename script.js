@@ -1,6 +1,26 @@
 var equation = "0";
 var length = 1;
 var answer = "";
+const button = document.getElementById("myButton");
+const input = document.getElementsByTagName("input");
+const paragraph = document.getElementById("myParagraph");
+
+button.addEventListener("mousedown", () => {
+  input.value = "Button clicked!";
+});
+
+button.addEventListener("mouseup", () => {
+  input.value = "";
+});
+
+button.addEventListener("mouseleave", () => {
+  paragraph.textContent = "Button not clicked!";
+});
+
+button.addEventListener("mouseenter", () => {
+  paragraph.textContent = "";
+});
+
 function swap() {
     if (equation[0] != "0" && equation[0] != "–") {
         equation = "–" + equation;
@@ -72,7 +92,7 @@ function num(digit) {
     for (let i=0; i<equation.length; i++) {
         if (equation[i] === ".") {
             length += 0.5;
-        } else if (equation[i] !== "^" && equation[i] !== "(" && equation[i] !== ")") {
+        } else if (equation[i] !== "^" && equation[i] !== "(" && equation[i] !== ")" && equation[i] !== "[" && equation[i] !== "]") {
             length++;
         }
     }
@@ -97,17 +117,14 @@ function equals() {
         .replaceAll('--', "+")
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
-        .replaceAll('Ans', answer)
         .replaceAll(/\√(\-?\d+|\d+.\d+)/g, "Math.sqrt($1)")
-        .replaceAll('--', "+");
-    equation = equation.replace(/(?<=^|[\+\-\**\*\/])-([0-9]+)/g, "($1)");
-    equation = equation.replaceAll("^", "**");
-    equation = equation.replaceAll(/(\d*)π/g, (match, p1) => {
+        .replaceAll('--', "+")
         .replaceAll('[', '(')
         .replaceAll(']', ')')
         .replaceAll('Ans', answer);
-    });
-    let minus = equation.match(/(\d+.\d+|\d+|e|π)?-(\d+.\d+|\d+|e|π)/g);
+    equation = equation.replace(/(?<=^|[\+\-\**\*\/])-([0-9]+)/g, "($1)");
+    equation = equation.replaceAll("^", "**");
+    let minus = equation.match(/(\d+\)|\d+.\d+|\d+|e|π)?-(\d+\)|\d+.\d+|\d+|e|π)/g);
     console.log(minus);
     if (minus != null) {
         for (let i=0; i<minus.length; i++) {
@@ -148,6 +165,7 @@ function equals() {
     if ((equation.includes("*") && !equation.includes("**")) && !equation.includes("Math.PI") && !equation.includes("Math.E")) {
         var numbers = equation.split("*");
         var round = 0;
+    }
     var round = 0;
     if (equation.includes("^")) {
         console.log(equation);
@@ -176,11 +194,12 @@ function equals() {
     }
     answer = equation;
 }
+
 function update(type) {
     document.getElementsByClassName(type)[0].style.width = `${document.getElementsByClassName(type)[0].value.length * 2.5}%`;
     length += equation.length - equation.lastIndexOf("(");
     if (equation.includes("[")) {
-        let divs = equation.match(/\(\[(\d+.\d+|\d+)\]\/\[(\d+.\d+|\d+)\]\)/g);
+        let divs = equation.match(/\(\[(\d+.\d+|\d+|)\]\/\[(\d+.\d+|\d+|)\]\)/g);
         if (divs != null) {
             length -= divs.length * 5;
         }
