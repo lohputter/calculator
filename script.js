@@ -1,7 +1,30 @@
 var equation = "0";
 var length = 1;
 var answer = "";
+<<<<<<< HEAD
 var input_clicks = [];
+=======
+const button = document.getElementById("myButton");
+const input = document.getElementsByTagName("input");
+const paragraph = document.getElementById("myParagraph");
+
+button.addEventListener("mousedown", () => {
+  input.value = "Button clicked!";
+});
+
+button.addEventListener("mouseup", () => {
+  input.value = "";
+});
+
+button.addEventListener("mouseleave", () => {
+  paragraph.textContent = "Button not clicked!";
+});
+
+button.addEventListener("mouseenter", () => {
+  paragraph.textContent = "";
+});
+
+>>>>>>> de4ce6130fe385f86cadd6a51add3353939329d1
 function swap() {
     if (equation[0] != "0" && equation[0] != "–") {
         equation = "–" + equation;
@@ -60,6 +83,7 @@ function del() {
     }
 }
 function num(digit) {
+<<<<<<< HEAD
     length = 0;
     for (let i=0; i<equation.length; i++) {
         if (equation[i] === ".") {
@@ -74,6 +98,14 @@ function num(digit) {
         equation = digit;
     }
     if (!input_clicks.includes(true)) {
+=======
+    if (length < 25) {
+        if (equation != "0" || digit == "." || digit == "!" || digit == "%" || digit == "+" || digit == "–" || digit == "×" || digit == "÷") {
+            equation += digit;
+        } else {
+            equation = digit;
+           }
+>>>>>>> de4ce6130fe385f86cadd6a51add3353939329d1
         document.getElementById("equation").innerHTML = equation;
         if (equation.includes("^")) {
             let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+)\)/g);
@@ -92,7 +124,7 @@ function num(digit) {
     for (let i=0; i<equation.length; i++) {
         if (equation[i] === ".") {
             length += 0.5;
-        } else if (equation[i] !== "^" && equation[i] !== "(" && equation[i] !== ")") {
+        } else if (equation[i] !== "^" && equation[i] !== "(" && equation[i] !== ")" && equation[i] !== "[" && equation[i] !== "]") {
             length++;
         }
     }
@@ -119,9 +151,18 @@ function equals() {
         .replaceAll('-+', "-")
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
+<<<<<<< HEAD
         .replaceAll('++', "+")
+=======
+        .replaceAll(/\√(\-?\d+|\d+.\d+)/g, "Math.sqrt($1)")
+        .replaceAll('--', "+")
+        .replaceAll('[', '(')
+        .replaceAll(']', ')')
+>>>>>>> de4ce6130fe385f86cadd6a51add3353939329d1
         .replaceAll('Ans', answer);
-    let minus = equation.match(/(\d+.\d+|\d+|e|π)?-(\d+.\d+|\d+|e|π)/g);
+    equation = equation.replace(/(?<=^|[\+\-\**\*\/])-([0-9]+)/g, "($1)");
+    equation = equation.replaceAll("^", "**");
+    let minus = equation.match(/(\d+\)|\d+.\d+|\d+|e|π)?-(\d+\)|\d+.\d+|\d+|e|π)/g);
     console.log(minus);
     if (minus != null) {
         for (let i=0; i<minus.length; i++) {
@@ -159,11 +200,35 @@ function equals() {
             equation = equation.replaceAll(percent[i], Number(percent[i].slice(0, -1)) / 100);
         }
     }
+<<<<<<< HEAD
     equation = equation
         .replaceAll("[", "(")
         .replaceAll("]", ")")
         .replaceAll("^", "**");
     equation = eval(equation);
+=======
+    if ((equation.includes("*") && !equation.includes("**")) && !equation.includes("Math.PI") && !equation.includes("Math.E")) {
+        var numbers = equation.split("*");
+        var round = 0;
+    }
+    var round = 0;
+    if (equation.includes("^")) {
+        console.log(equation);
+        var numbers = equation.match(/\^\((\d+.\d+|\d+)\)/g);
+        console.log(numbers);
+        for (let i=0; i<numbers.length; i++) {
+            if (!numbers[i].includes(".")) {
+                round += numbers[i].slice(2, numbers[i].length).length;
+            }
+        }
+    }
+    equation = equation.replaceAll("^", "**");
+    if (round == 0) {
+        equation = eval(equation);
+    } else {
+        equation = Number(eval(equation).toFixed(round));
+    }
+>>>>>>> de4ce6130fe385f86cadd6a51add3353939329d1
     document.getElementById("equation").innerHTML = equation;
     length = 0;
     for (let i in String(equation)) {
@@ -175,11 +240,16 @@ function equals() {
     }
     answer = equation;
 }
+
 function update(type) {
     document.getElementsByClassName(type)[0].style.width = `${document.getElementsByClassName(type)[0].value.length * 2.5}%`;
     length += equation.length - equation.lastIndexOf("(");
     if (equation.includes("[")) {
+<<<<<<< HEAD
         let divs = equation.match(/\(\[(\d+.\d+|\d+|e|π|)\]\/\[(\d+.\d+|\d+|e|π|)\]\)/g);
+=======
+        let divs = equation.match(/\(\[(\d+.\d+|\d+|)\]\/\[(\d+.\d+|\d+|)\]\)/g);
+>>>>>>> de4ce6130fe385f86cadd6a51add3353939329d1
         if (divs != null) {
             length -= divs.length * 5;
         }
