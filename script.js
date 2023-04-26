@@ -74,7 +74,7 @@ function num(digit) {
             equation += digit;
         } else {
             equation = digit;
-        }
+           }
         document.getElementById("equation").innerHTML = equation;
         if (equation.includes("^")) {
             let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+)\)/g);
