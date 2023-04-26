@@ -1,30 +1,7 @@
 var equation = "0";
 var length = 1;
 var answer = "";
-<<<<<<< HEAD
 var input_clicks = [];
-=======
-const button = document.getElementById("myButton");
-const input = document.getElementsByTagName("input");
-const paragraph = document.getElementById("myParagraph");
-
-button.addEventListener("mousedown", () => {
-  input.value = "Button clicked!";
-});
-
-button.addEventListener("mouseup", () => {
-  input.value = "";
-});
-
-button.addEventListener("mouseleave", () => {
-  paragraph.textContent = "Button not clicked!";
-});
-
-button.addEventListener("mouseenter", () => {
-  paragraph.textContent = "";
-});
-
->>>>>>> de4ce6130fe385f86cadd6a51add3353939329d1
 function swap() {
     if (equation[0] != "0" && equation[0] != "–") {
         equation = "–" + equation;
