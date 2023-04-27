@@ -33,10 +33,10 @@ function pow() {
 }
 function frac() {
     if (equation != "0") {
-        document.getElementById("equation").innerHTML += `<sup><input onclick="setInput(${input_clicks.length})" onkeyup="update('numer')" class="numer" type="text"></sup>&frasl;<sub><input onclick="setInput(${input_clicks.length+1})"  onkeyup="update('denom')" class="denom" type="text"></sub></frac>`;
+        document.getElementById("equation").innerHTML += `<span><div style="text-align: center;border-bottom: 1px solid black;"><input onclick="setInput(${input_clicks.length})" onkeyup="update('numer')" class="numer" type="text"></div><div style="text-align:center;"><input onclick="setInput(${input_clicks.length+1})" onkeyup="update('denom')" class="denom" type="text"></div></span>`;
         equation += "(";
     } else {
-        document.getElementById("equation").innerHTML = `<sup><input onclick="setInput(${input_clicks.length})" onkeyup="update('numer')" class="numer" type="text"></sup>&frasl;<sub><input onclick="setInput(${input_clicks.length+1})" onkeyup="update('denom')" class="denom" type="text"></sub></frac>`;
+        document.getElementById("equation").innerHTML = `<span><input onclick="setInput(${input_clicks.length})" onkeyup="update('numer')" class="numer" type="text"><input onclick="setInput(${input_clicks.length+1})" onkeyup="update('denom')" class="denom" type="text"></span>`;
         equation = "(";
     }
 }
@@ -203,7 +203,7 @@ function setInput(number) {
 }
 window.addEventListener('click', (event) => {
     console.log(String(event.target));
-    if (!String(event.target).includes("Input")) {
+    if ((!String(event.target).includes("Input"))) {
         input_clicks = [];
         for (let i=0; i<document.getElementsByTagName("input").length; i++) {
             input_clicks.push(false);
