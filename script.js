@@ -11,7 +11,7 @@ window.addEventListener("keypress", (event)=>{
     } else if (keyPressed == "/") {
         keyPressed = "÷";
     }
-    let keyCodes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "–", "×", "÷", "%"];
+    let keyCodes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "–", "×", "÷", "%", ".", "!"];
     if (keyCodes.includes(keyPressed) && !input_clicks.includes(true)) {
         num(keyPressed);
     }
@@ -47,10 +47,10 @@ function pow() {
 }
 function frac() {
     if (equation != "0") {
-        document.getElementById("equation").innerHTML += `<span><div style="text-align: center;border-bottom: 1px solid black;"><input onclick="setInput(${input_clicks.length})" onkeyup="update('numer')" class="numer" type="text"></div><div style="text-align:center;"><input onclick="setInput(${input_clicks.length+1})" onkeyup="update('denom')" class="denom" type="text"></div></span>`;
+        document.getElementById("equation").innerHTML += `<sup><input onclick="setInput(${input_clicks.length})" onkeyup="update('numer')" class="numer" type="text"></sup>&frasl;<sub><input onclick="setInput(${input_clicks.length+1})" onkeyup="update('denom')" class="denom" type="text"></input></sub>`;
         equation += "(";
     } else {
-        document.getElementById("equation").innerHTML = `<span><input onclick="setInput(${input_clicks.length})" onkeyup="update('numer')" class="numer" type="text"><input onclick="setInput(${input_clicks.length+1})" onkeyup="update('denom')" class="denom" type="text"></span>`;
+        document.getElementById("equation").innerHTML = `<sup><input onclick="setInput(${input_clicks.length})" onkeyup="update('numer')" class="numer" type="text"></sup>&frasl;<sub><input onclick="setInput(${input_clicks.length+1})" onkeyup="update('denom')" class="denom" type="text"></input></sub>`;
         equation = "(";
     }
 }
