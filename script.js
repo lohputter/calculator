@@ -2,6 +2,16 @@ var equation = "0";
 var length = 1;
 var answer = "";
 var input_clicks = [];
+window.addEventListener("keydown", (event)=>{
+    let keyPressed = event.keyCode;
+    console.log(keyPressed);
+    let keyCodes = {
+        
+    };
+    if (keyCodes.includes(keyPressed) && !input_clicks.includes(true)) {
+        num(keyPressed);
+    }
+});
 function swap() {
     if (equation[0] != "0" && equation[0] != "–") {
         equation = "–" + equation;
@@ -23,7 +33,7 @@ function pow() {
         document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(/\(\[(\d+.\d+|\d+|e|π|)\]\/\[(\d+.\d+|\d+|e|π|)\]\)/g, `<sup>$1</sup>&frasl;<sub>$2</sub>`);
     }
     if (equation.includes("^")) {
-        let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+)\)/g);
+        let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+|e|π)\)/g);
         for (let i=0; i<indices.length; i++) {
             document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(indices[i], `<sup>${indices[i].slice(2, -1)}</sup>`);
         }
@@ -76,7 +86,7 @@ function num(digit) {
     if (!input_clicks.includes(true)) {
         document.getElementById("equation").innerHTML = equation;
         if (equation.includes("^")) {
-            let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)(\d+|\d+.\d+)\)/g);
+            let indices = document.getElementById("equation").innerHTML.match(/\^\((-+|)((\d+|\d+.\d+|e|π)(\+|\-|))+\)/g);
             for (let i=0; i<indices.length; i++) {
                 document.getElementById("equation").innerHTML = document.getElementById("equation").innerHTML.replaceAll(indices[i], `<sup>${indices[i].slice(2, -1)}</sup>`);
             }
