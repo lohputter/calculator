@@ -4,7 +4,14 @@ var answer = "";
 var input_clicks = [];
 window.addEventListener("keypress", (event)=>{
     let keyPressed = event.key;
-    let keyCodes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+"];
+    if (keyPressed == "*") {
+        keyPressed = "×";
+    } else if (keyPressed == "-") {
+        keyPressed = "–";
+    } else if (keyPressed == "/") {
+        keyPressed = "÷";
+    }
+    let keyCodes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "–", "×", "÷", "%"];
     if (keyCodes.includes(keyPressed) && !input_clicks.includes(true)) {
         num(keyPressed);
     }
