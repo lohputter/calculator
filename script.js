@@ -1,25 +1,6 @@
 var equation = "0";
 var length = 1;
 var answer = "";
-const button = document.getElementById("myButton");
-const input = document.getElementsByTagName("input");
-const paragraph = document.getElementById("myParagraph");
-
-button.addEventListener("mousedown", () => {
-  input.value = "Button clicked!";
-});
-
-button.addEventListener("mouseup", () => {
-  input.value = "";
-});
-
-button.addEventListener("mouseleave", () => {
-  paragraph.textContent = "Button not clicked!";
-});
-
-button.addEventListener("mouseenter", () => {
-  paragraph.textContent = "";
-});
 
 function swap() {
     if (equation[0] != "0" && equation[0] != "–") {
@@ -114,7 +95,8 @@ function equals() {
         .replaceAll('×', '*')
         .replaceAll('÷', '/')
         .replaceAll('–', '-')
-        .replaceAll('--', "+")
+        .replaceAll('+-', "-")
+        .replaceAll('++', "+")
         .replaceAll('︱', 'Math.abs(')
         .replaceAll('│', ')')
         .replaceAll(/\√(\-?\d+|\d+.\d+)/g, "Math.sqrt($1)")
