@@ -63,6 +63,14 @@ h1:nth-child(2) {
 .imp {
     background-color: #fca656;
 }
+span {
+    display: inline-block;
+    vertical-align: middle;
+}
+.sqrt {
+    height: 4vw;
+    font-size: 4vw;
+}   
 input {
     border: none;
     font-family: 'STIX Two Text', serif;
@@ -70,8 +78,5 @@ input {
     height: 10%;
     width: 2.5%;
     font-size: 3vw;
-}
-.sqrt {
-    height: 4vw;
-    font-size: 4vw;
+    text-align: center;
 }
