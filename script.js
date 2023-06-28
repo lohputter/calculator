@@ -10,15 +10,19 @@ window.addEventListener("keypress", (event)=>{
         keyPressed = "–";
     } else if (keyPressed == "/") {
         keyPressed = "÷";
-    }
+    } 
     let keyCodes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "–", "×", "÷", "%", ".", "!"];
-    if (keyCodes.includes(keyPressed) && !input_clicks.includes(true)) {
-        num(keyPressed);
+    if (!input_clicks.includes(true)) {
+        if (keyCodes.includes(keyPressed)) {
+            num(keyPressed);
+        } else if (keyPressed == "Enter" || keyPressed == "=") {
+            equals(); 
+        }
     }
 });
 function swap() {
     if (equation[0] != "0" && equation[0] != "–") {
-        equation = "–" + equation;
+        equation = "-" + equation;
         length++;
     } else {
         equation = equation.slice(1, equation.length+1);
@@ -55,12 +59,17 @@ function frac() {
     }
 }
 function sqrt() {
-    if (equation != "0") {
-        document.getElementById("equation").innerHTML += `√`;
-        equation += "√";
+    if (!input_clicks.includes(true)) {
+        if (equation != "0") {
+            document.getElementById("equation").innerHTML += `√`;
+            equation += "√";
+        } else {
+            document.getElementById("equation").innerHTML = `√`;
+            equation = "√";
+        }
     } else {
-        document.getElementById("equation").innerHTML = `√`;
-        equation = "√";
+        document.getElementsByTagName("input")[input_clicks.indexOf(true)].value += `√`;
+        update(document.getElementsByTagName("input")[input_clicks.indexOf(true)].className);     
     }
 }
 function del() {
@@ -137,7 +146,6 @@ function equals() {
         .replaceAll('│', ')')
         .replaceAll('++', "+")
         .replaceAll('Ans', answer);
-    equation = equation.replace(/(?<=^|[\+\-\**\*\/])-([0-9]+)/g, "($1)");
     equation = equation.replaceAll("^", "**");
     let minus = equation.match(/(\d+\)|\d+.\d+|\d+|e|π)?-(\d+\)|\d+.\d+|\d+|e|π)/g);
     console.log(minus);
@@ -225,5 +233,4 @@ window.addEventListener('click', (event) => {
             input_clicks.push(false);
         }
     }   
-    console.log(input_clicks);
 });
