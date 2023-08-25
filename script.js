@@ -151,20 +151,22 @@ function equals() {
         }
     }
     equation = equation.replaceAll(/\√(\d+.\d+|\d+|e|π|\(\[(\d+.\d+|\d+)\]\/\[(\d+.\d+|\d+)\]\))/g, "Math.sqrt($1)");
-    equation = equation.replaceAll(/(\d*|e|π)π/g, (match, p1) => {
+    equation = equation.replaceAll(/(\d*|e)π/g, (match, p1) => {
         if (p1) {
             return `${p1} * Math.PI`;
         } else {
             return "Math.PI";
         }
     });
-    equation = equation.replaceAll(/(\d*|Math.PI|e)e/g, (match, p1) => {
+    equation = equation.replaceAll(/(\d*|Math.PI)e/g, (match, p1) => {
         if (p1) {
             return `${p1} * Math.E`;
         } else {
             return "Math.E";
         }
     });
+    
+    console.log(equation);
     if (equation.includes("!")) {
         let factor = equation.match(/([0-9]+)!/gi);
         for (let i = 0; i < factor.length; i++) {
